@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("person")
-public class personResource {
+public class PersonResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
        
@@ -38,6 +38,15 @@ public class personResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response postExample(String input){
+        PersonDTO rmdto = GSON.fromJson(input, PersonDTO.class);
+        System.out.println(rmdto);
+        return Response.ok().entity(rmdto).build();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response putExample(String input){
         PersonDTO rmdto = GSON.fromJson(input, PersonDTO.class);
         System.out.println(rmdto);
         return Response.ok().entity(rmdto).build();
