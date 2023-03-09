@@ -1,7 +1,8 @@
 package facades;
 
-import dtos.RenameMeDTO;
-import entities.RenameMe;
+import dtos.PersonDTO;
+import entities.Person;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,42 +41,42 @@ public class FacadeExample {
         return emf.createEntityManager();
     }
     
-    public RenameMeDTO create(RenameMeDTO rm){
-        RenameMe rme = new RenameMe(rm.getDummyStr1(), rm.getDummyStr2());
+    public PersonDTO create(PersonDTO personDTO){
+        Person person = new Person("Email@.com","firstname","lastname");
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(rme);
+            em.persist(person);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        return new RenameMeDTO(rme);
+        return new PersonDTO(person);
     }
-    public RenameMeDTO getById(long id) { //throws RenameMeNotFoundException {
+    public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
-        RenameMe rm = em.find(RenameMe.class, id);
+        Person rm = em.find(Person.class, id);
 //        if (rm == null)
 //            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
-        return new RenameMeDTO(rm);
+        return new PersonDTO(rm);
     }
     
     //TODO Remove/Change this before use
-    public long getRenameMeCount(){
+    public long getPersonCount(){
         EntityManager em = getEntityManager();
         try{
-            long renameMeCount = (long)em.createQuery("SELECT COUNT(r) FROM RenameMe r").getSingleResult();
-            return renameMeCount;
+            long personCount = (long)em.createQuery("SELECT COUNT(r) FROM Person r").getSingleResult();
+            return personCount;
         }finally{  
             em.close();
         }
     }
     
-    public List<RenameMeDTO> getAll(){
+    public List<PersonDTO> getAll(){
         EntityManager em = emf.createEntityManager();
-        TypedQuery<RenameMe> query = em.createQuery("SELECT r FROM RenameMe r", RenameMe.class);
-        List<RenameMe> rms = query.getResultList();
-        return RenameMeDTO.getDtos(rms);
+        TypedQuery<Person> query = em.createQuery("SELECT r FROM Person r", Person.class);
+        List<Person> rms = query.getResultList();
+        return PersonDTO.getDtos(rms);
     }
     
     public static void main(String[] args) {
