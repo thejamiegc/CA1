@@ -1,40 +1,110 @@
 package entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
-@NamedQuery(name = "RenameMe.deleteAllRows", query = "DELETE from Person")
+@NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person")
+@Table(name = "Person")
 public class Person implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-    private String email;
+
+    @Column(name = "firstname", length = 45)
     private String firstname;
+
+    @Column(name = "lastname", length = 45)
     private String lastname;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "gender", length = 45)
+    private String gender;
+
+    @Column(name = "relationshipstatus", length = 45)
+    private String relationshipstatus;
 
     public Person() {
     }
 
-    public Person(String email, String firstname, String lastname) {
-        this.email = email;
+    public Person(String firstname, String lastname, String email, String gender, String relationshipstatus) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.email = email;
+        this.gender = gender;
+        this.relationshipstatus = relationshipstatus;
     }
 
-    public Long getId() {
-        return id;
+    @ManyToMany
+    @JoinTable(name = "Person_has_Work",
+            joinColumns = @JoinColumn(name = "Person_id"),
+            inverseJoinColumns = @JoinColumn(name = "Work_id"))
+    private Set<Work> works = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "person")
+    private Set<Address> addresses = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "person")
+    private Set<Phone> phones = new LinkedHashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "Person_has_Hobby",
+            joinColumns = @JoinColumn(name = "Person_id"),
+            inverseJoinColumns = @JoinColumn(name = "Hobby_id"))
+    private Set<Hobby> hobbies = new LinkedHashSet<>();
+
+    public Set<Hobby> getHobbies() {
+        return hobbies;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setHobbies(Set<Hobby> hobbies) {
+        this.hobbies = hobbies;
+    }
+
+    public Set<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(Set<Phone> phones) {
+        this.phones = phones;
+    }
+
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public Set<Work> getWorks() {
+        return works;
+    }
+
+    public void setWorks(Set<Work> works) {
+        this.works = works;
+    }
+
+    public String getRelationshipstatus() {
+        return relationshipstatus;
+    }
+
+    public void setRelationshipstatus(String relationshipstatus) {
+        this.relationshipstatus = relationshipstatus;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getEmail() {
@@ -45,6 +115,14 @@ public class Person implements Serializable {
         this.email = email;
     }
 
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -53,11 +131,11 @@ public class Person implements Serializable {
         this.firstname = firstname;
     }
 
-    public String getLastname() {
-        return lastname;
+    public Long getId() {
+        return id;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -1,7 +1,8 @@
 package facades;
 
-import utils.EMF_Creator;
 import entities.Person;
+import utils.EMF_Creator;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -39,9 +40,9 @@ public class PersonFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
-            em.persist(new Person("Some@txt.com", "Moretext","EvenMoreText"));
-            em.persist(new Person("aaa@aaa.com", "bbb","ccc"));
+            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.persist(new Person("Moretext","EvenMoreText","asd@das.dk","gender","loner"));
+            em.persist(new Person("bbb","ccc","aaa@aaa.com","binary","01"));
 
             em.getTransaction().commit();
         } finally {

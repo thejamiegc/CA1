@@ -19,6 +19,8 @@ public class PersonDTO {
     private String email;
     private String firstname;
     private String lastname;
+    private String gender;
+    private String relationshipStatus;
 
 
     public PersonDTO(String email, String firstname, String lastname) {
@@ -40,11 +42,67 @@ public class PersonDTO {
             this.email = person.getEmail();
             this.firstname = person.getFirstname();
             this.lastname = person.getLastname();
+            this.gender = person.getGender();
+            this.relationshipStatus = person.getRelationshipstatus();
     }
 
+    public long getId() {
+        return id;
+    }
 
-    
-    
-    
-    
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getRelationshipStatus() {
+        return relationshipStatus;
+    }
+
+    public void setRelationshipStatus(String relationshipStatus) {
+        this.relationshipStatus = relationshipStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", relationshipStatus='" + relationshipStatus + '\'' +
+                '}';
+    }
 }

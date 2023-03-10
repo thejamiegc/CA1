@@ -1,7 +1,6 @@
 package facades;
 
 import dtos.PersonDTO;
-import entities.Person;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -9,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 //import errorhandling.RenameMeNotFoundException;
+import entities.Person;
 import utils.EMF_Creator;
 
 /**
@@ -42,7 +42,7 @@ public class PersonFacade {
     }
     
     public PersonDTO create(PersonDTO personDTO){
-        Person person = new Person("Email@.com","firstname","lastname");
+        Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail(),personDTO.getGender(),personDTO.getRelationshipStatus());
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
