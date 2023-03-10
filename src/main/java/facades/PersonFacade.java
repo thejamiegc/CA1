@@ -60,8 +60,7 @@ public class PersonFacade {
 //            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
         return new PersonDTO(rm);
     }
-    
-    //TODO Remove/Change this before use
+
     public long getPersonCount(){
         EntityManager em = getEntityManager();
         try{

@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.PersonDTO;
 import entities.Person;
 import utils.EMF_Creator;
 
@@ -11,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -34,10 +37,10 @@ public class PersonFacadeTest {
     }
 
     // Setup the DataBase in a known state BEFORE EACH TEST
-    //TODO -- Make sure to change the code below to use YOUR OWN entity class
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
+
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
@@ -55,11 +58,25 @@ public class PersonFacadeTest {
 //        Remove any data after each test was run
     }
 
-    // TODO: Delete or change this method 
     @Test
-    public void testAFacadeMethod() throws Exception {
+    public void testPersonCount() throws Exception {
+        System.out.println("testing Person count");
         assertEquals(2, facade.getPersonCount(), "Expects two rows in the database");
     }
+
+/*    @Test
+    public void testGetAllPeople(){
+        System.out.println("testing get all people");
+        List<PersonDTO> people = facade.getAll();
+
+        assertEquals("Moretext",people.get(0).getFirstname(),"Expects the first person in the list");
+        assertEquals("bbb",people.get(1).getFirstname(),"Expects the second person in the list");
+    }*/
+
+//    @Test
+//    public void testUpdatePerson{
+//
+//    }
     
 
 }

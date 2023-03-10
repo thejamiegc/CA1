@@ -16,6 +16,48 @@ public class Phone implements Serializable {
     @JoinColumn(name = "Person_id")
     private Person person;
 
+    @Column(name = "number", length = 45)
+    private String number;
+
+    @Column(name = "countrycode", length = 45)
+    private String countrycode;
+
+    @Column(name = "description", length = 45)
+    private String description;
+
+    public Phone() {
+    }
+
+    public Phone(String number, String countrycode, String description) {
+        this.number = number;
+        this.countrycode = countrycode;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCountrycode() {
+        return countrycode;
+    }
+
+    public void setCountrycode(String countrycode) {
+        this.countrycode = countrycode;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     public Person getPerson() {
         return person;
     }
@@ -32,5 +74,14 @@ public class Phone implements Serializable {
         this.id = id;
     }
 
-    //TODO Reverse Engineering! Migrate other columns to the entity
+    @Override
+    public String toString() {
+        return "Phone{" +
+                "id=" + id +
+                ", person=" + person +
+                ", number='" + number + '\'' +
+                ", countrycode='" + countrycode + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

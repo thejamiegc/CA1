@@ -16,6 +16,61 @@ public class Address implements Serializable {
     @JoinColumn(name = "Person_id")
     private Person person;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Cityinfo_zipcode")
+    private Cityinfo cityinfoZipcode;
+
+    @Column(name = "streetname", length = 100)
+    private String streetname;
+
+    @Column(name = "streetnumber", length = 45)
+    private String streetnumber;
+
+    @Column(name = "hometype", length = 45)
+    private String hometype;
+
+    public Address() {
+    }
+
+    public Address(Cityinfo cityinfoZipcode, String streetname, String streetnumber, String hometype) {
+        this.cityinfoZipcode = cityinfoZipcode;
+        this.streetname = streetname;
+        this.streetnumber = streetnumber;
+        this.hometype = hometype;
+    }
+
+    public String getHometype() {
+        return hometype;
+    }
+
+    public void setHometype(String hometype) {
+        this.hometype = hometype;
+    }
+
+    public String getStreetnumber() {
+        return streetnumber;
+    }
+
+    public void setStreetnumber(String streetnumber) {
+        this.streetnumber = streetnumber;
+    }
+
+    public String getStreetname() {
+        return streetname;
+    }
+
+    public void setStreetname(String streetname) {
+        this.streetname = streetname;
+    }
+
+    public Cityinfo getCityinfoZipcode() {
+        return cityinfoZipcode;
+    }
+
+    public void setCityinfoZipcode(Cityinfo cityinfoZipcode) {
+        this.cityinfoZipcode = cityinfoZipcode;
+    }
+
     public Person getPerson() {
         return person;
     }
@@ -32,5 +87,15 @@ public class Address implements Serializable {
         this.id = id;
     }
 
-    //TODO Reverse Engineering! Migrate other columns to the entity
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", person=" + person +
+                ", cityinfoZipcode=" + cityinfoZipcode +
+                ", streetname='" + streetname + '\'' +
+                ", streetnumber='" + streetnumber + '\'' +
+                ", hometype='" + hometype + '\'' +
+                '}';
+    }
 }

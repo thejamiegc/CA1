@@ -10,28 +10,27 @@ import entities.Person;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author tha
- */
+
 public class PersonDTO {
     private long id;
-    private String email;
     private String firstname;
     private String lastname;
+    private String email;
     private String gender;
     private String relationshipStatus;
 
 
-    public PersonDTO(String email, String firstname, String lastname) {
-        this.email = email;
+    public PersonDTO(String firstname, String lastname,String email, String gender, String relationshipStatus) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.email = email;
+        this.gender = gender;
+        this.relationshipStatus = relationshipStatus;
     }
 
-    public static List<PersonDTO> getDtos(List<Person> rms){
+    public static List<PersonDTO> getDtos(List<Person> people){
         List<PersonDTO> personDTOS = new ArrayList();
-        rms.forEach(rm->personDTOS.add(new PersonDTO(rm)));
+        people.forEach(person->personDTOS.add(new PersonDTO(person)));
         return personDTOS;
     }
 

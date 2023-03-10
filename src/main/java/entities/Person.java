@@ -138,4 +138,20 @@ public class Person implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", relationshipstatus='" + relationshipstatus + '\'' +
+                ", works=" + works +
+                ", addresses=" + addresses +
+                ", phones=" + phones +
+                ", hobbies=" + hobbies +
+                '}';
+    }
 }
