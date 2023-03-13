@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.HobbyDTO;
 import dtos.PersonDTO;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 //import errorhandling.RenameMeNotFoundException;
+import entities.Hobby;
 import entities.Person;
 import utils.EMF_Creator;
 
@@ -53,7 +55,7 @@ public class PersonFacade {
         }
         return new PersonDTO(person);
     }
-    public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
+    public PersonDTO getById(int id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person rm = em.find(Person.class, id);
 //        if (rm == null)
@@ -82,6 +84,41 @@ public class PersonFacade {
         emf = EMF_Creator.createEntityManagerFactory();
         PersonFacade fe = getPersonFacade(emf);
         fe.getAll().forEach(dto->System.out.println(dto));
+        Person tmpPerson = fe.getById2(4);
+
+        System.out.println(tmpPerson.getHobbies());
     }
 
+    public PersonDTO updatePersonById(long id, PersonDTO personDTO) {
+        EntityManager em = emf.createEntityManager();
+        Person tmpPerson = null;
+        if(em.find(Person.class, id)!= null){
+            tmpPerson = new Person(personDTO.getFirstname(),personDTO.getLastname(),personDTO.getEmail(),personDTO.getGender(),personDTO.getRelationshipStatus());
+            tmpPerson.setId(id);
+            try{
+                em.getTransaction().begin();
+                em.merge(tmpPerson);
+                em.getTransaction().commit();
+            }finally {
+                em.close();
+            }
+        }
+        return new PersonDTO(tmpPerson);
+
+    }
+
+    public PersonDTO getPersonByHobby(Person person) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Hobby> query = em.createQuery("SELECT r.people FROM Hobby r", Hobby.class);
+
+        System.out.println(person.getHobbies());
+        return null;
+    }
+    public Person getById2(long id) { //throws RenameMeNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        Person rm = em.find(Person.class, id);
+//        if (rm == null)
+//            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
+        return rm;
+    }
 }

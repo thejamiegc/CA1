@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("person")
@@ -21,8 +22,9 @@ public class PersonResource {
             
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello from Jon\"}";
+    public List<PersonDTO> getListOfPeople() {
+       return FACADE.getAll();
+
     }
 
     @GET
@@ -38,17 +40,20 @@ public class PersonResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response postExample(String input){
-        PersonDTO rmdto = GSON.fromJson(input, PersonDTO.class);
-        System.out.println(rmdto);
-        return Response.ok().entity(rmdto).build();
+        PersonDTO personDTO = GSON.fromJson(input, PersonDTO.class);
+        System.out.println(personDTO);
+        FACADE.create(personDTO);
+        return Response.ok().entity(personDTO).build();
     }
 
     @PUT
+    @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response putExample(String input){
-        PersonDTO rmdto = GSON.fromJson(input, PersonDTO.class);
-        System.out.println(rmdto);
-        return Response.ok().entity(rmdto).build();
+    public Response putExample(String input,@PathParam("id")long id){
+        PersonDTO personDTO = GSON.fromJson(input, PersonDTO.class);
+        System.out.println(personDTO);
+        PersonDTO newPerson = FACADE.updatePersonById(id,personDTO);
+        return Response.ok().entity(newPerson).build();
     }
 }

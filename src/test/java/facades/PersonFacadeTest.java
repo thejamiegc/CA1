@@ -1,6 +1,5 @@
 package facades;
 
-import dtos.PersonDTO;
 import entities.Person;
 import utils.EMF_Creator;
 
@@ -12,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -29,6 +26,8 @@ public class PersonFacadeTest {
     public static void setUpClass() {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
        facade = PersonFacade.getPersonFacade(emf);
+
+
     }
 
     @AfterAll
@@ -44,7 +43,8 @@ public class PersonFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT = 1");
+            em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT = 1").executeUpdate();
+
             em.persist(new Person("Moretext","EvenMoreText","asd@das.dk","gender","loner"));
             em.persist(new Person("bbb","ccc","aaa@aaa.com","binary","01"));
 
@@ -57,7 +57,15 @@ public class PersonFacadeTest {
     @AfterEach
     public void tearDown() {
 //        Remove any data after each test was run
+
+
     }
+
+    @Test
+    public void testGetPersonById(){
+        assertEquals("Moretext",facade.getById(1).getFirstname());
+    }
+
 
     @Test
     public void testPersonCount() throws Exception {
@@ -74,10 +82,6 @@ public class PersonFacadeTest {
         assertEquals("bbb",people.get(1).getFirstname(),"Expects the second person in the list");
     }*/
 
-    @Test
-    public void testGetPersonById(){
-        assertEquals("Moretext",facade.getById(1).getFirstname());
-    }
-    
+
 
 }
