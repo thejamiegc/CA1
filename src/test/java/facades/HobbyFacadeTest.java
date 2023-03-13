@@ -33,6 +33,7 @@ class HobbyFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.createNativeQuery("ALTER TABLE Hobby AUTO_INCREMENT = 1");
             em.persist(new Hobby("Test","test","category","type"));
 
 

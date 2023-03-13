@@ -44,6 +44,7 @@ public class PersonFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT = 1");
             em.persist(new Person("Moretext","EvenMoreText","asd@das.dk","gender","loner"));
             em.persist(new Person("bbb","ccc","aaa@aaa.com","binary","01"));
 
@@ -73,10 +74,10 @@ public class PersonFacadeTest {
         assertEquals("bbb",people.get(1).getFirstname(),"Expects the second person in the list");
     }*/
 
-//    @Test
-//    public void testUpdatePerson{
-//
-//    }
+    @Test
+    public void testGetPersonById(){
+        assertEquals("Moretext",facade.getById(1).getFirstname());
+    }
     
 
 }
