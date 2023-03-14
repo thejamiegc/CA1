@@ -6,8 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = "Hobby.deleteAllRows", query = "DELETE from Hobby")
-@Table(name = "Hobby")
+@Table(name="Hobby")
+@NamedQuery(name="Hobby.deleteAllRows",query="DELETE from Hobby")
 public class Hobby implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -88,15 +88,4 @@ public class Hobby implements Serializable {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Hobby{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", wikilink='" + wikilink + '\'' +
-                ", category='" + category + '\'' +
-                ", type='" + type + '\'' +
-                ", people=" + people +
-                '}';
-    }
 }

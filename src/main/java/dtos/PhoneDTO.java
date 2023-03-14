@@ -1,6 +1,5 @@
 package dtos;
 
-import entities.Person;
 import entities.Phone;
 
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package facades;
 
-import dtos.HobbyDTO;
 import dtos.PersonDTO;
 
 import java.util.List;
@@ -91,8 +90,8 @@ public class PersonFacade {
 
     public PersonDTO updatePersonById(long id, PersonDTO personDTO) {
         EntityManager em = emf.createEntityManager();
-        Person tmpPerson = null;
-        if(em.find(Person.class, id)!= null){
+        Person tmpPerson = em.find(Person.class, id);
+        if(tmpPerson != null){
             tmpPerson = new Person(personDTO.getFirstname(),personDTO.getLastname(),personDTO.getEmail(),personDTO.getGender(),personDTO.getRelationshipStatus());
             tmpPerson.setId(id);
             try{
@@ -109,11 +108,16 @@ public class PersonFacade {
 
     public PersonDTO getPersonByHobby(Person person) {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Hobby> query = em.createQuery("SELECT r.people FROM Hobby r", Hobby.class);
+        TypedQuery<Hobby> query = em.createQuery("SELECT r FROM Hobby r JOIN Person p WHERE r.id = p.id", Hobby.class);
 
+        // SELECT Person_id FROM Person_has_hobby WHERE Hobby_id = ?
+        // SELECT firstname FROM Person WHERE Person_id = ^^
+        // SELECT name FROM Hobby WHERE Hobby_id = ?
         System.out.println(person.getHobbies());
         return null;
     }
+
+
     public Person getById2(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person rm = em.find(Person.class, id);

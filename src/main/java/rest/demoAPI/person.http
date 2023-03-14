@@ -12,3 +12,6 @@ PUT http://localhost:8080/ca1/api/person/4
 Content-Type: application/json
 
 {"email": "oreosermitliv@jubi.com", "firstname": "Linus", "lastname":  "TINUS", "gender": "PC","relationshipstatus": "xD"}
+
+###
+GET http://localhost:8080/ca1/api/person/count

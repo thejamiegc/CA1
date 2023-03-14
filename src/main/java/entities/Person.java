@@ -6,8 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person")
 @Table(name = "Person")
+@NamedQuery(name="Person.deleteAllRows",query="DELETE from Person")
 public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -30,23 +30,6 @@ public class Person implements Serializable {
     @Column(name = "relationshipstatus", length = 45)
     private String relationshipstatus;
 
-    public Person() {
-    }
-
-    public Person(String firstname, String lastname, String email, String gender, String relationshipstatus) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.gender = gender;
-        this.relationshipstatus = relationshipstatus;
-    }
-
-    @ManyToMany
-    @JoinTable(name = "Person_has_Work",
-            joinColumns = @JoinColumn(name = "Person_id"),
-            inverseJoinColumns = @JoinColumn(name = "Work_id"))
-    private Set<Work> works = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "person")
     private Set<Address> addresses = new LinkedHashSet<>();
 
@@ -58,6 +41,17 @@ public class Person implements Serializable {
             joinColumns = @JoinColumn(name = "Person_id"),
             inverseJoinColumns = @JoinColumn(name = "Hobby_id"))
     private Set<Hobby> hobbies = new LinkedHashSet<>();
+
+    public Person() {
+    }
+
+    public Person(String firstname, String lastname, String email, String gender, String relationshipstatus) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.gender = gender;
+        this.relationshipstatus = relationshipstatus;
+    }
 
     public Set<Hobby> getHobbies() {
         return hobbies;
@@ -81,14 +75,6 @@ public class Person implements Serializable {
 
     public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
-    }
-
-    public Set<Work> getWorks() {
-        return works;
-    }
-
-    public void setWorks(Set<Work> works) {
-        this.works = works;
     }
 
     public String getRelationshipstatus() {
@@ -137,21 +123,5 @@ public class Person implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
-                ", relationshipstatus='" + relationshipstatus + '\'' +
-                ", works=" + works +
-                ", addresses=" + addresses +
-                ", phones=" + phones +
-                ", hobbies=" + hobbies +
-                '}';
     }
 }

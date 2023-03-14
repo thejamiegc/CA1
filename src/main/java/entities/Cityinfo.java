@@ -6,30 +6,28 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = "Cityinfo.deleteAllRows", query = "DELETE from Cityinfo")
 @Table(name = "Cityinfo")
+@NamedQuery(name="Cityinfo.deleteAllRows",query="DELETE from Cityinfo")
 public class Cityinfo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "zipcode", nullable = false)
-    private int zipcode;
+    private Integer id;
 
     @Column(name = "city", length = 45)
     private String city;
 
-    public Cityinfo() {
+    @OneToMany(mappedBy = "cityinfoZipcode")
+    private Set<Address> addresses = new LinkedHashSet<>();
 
+    public Cityinfo() {
     }
 
-    public Cityinfo(int zipcode, String city, Set<Address> addresses) {
-        this.zipcode = zipcode;
+    public Cityinfo(String city, Set<Address> addresses) {
         this.city = city;
         this.addresses = addresses;
     }
-
-    @OneToMany(mappedBy = "cityinfoZipcode")
-    private Set<Address> addresses = new LinkedHashSet<>();
 
     public Set<Address> getAddresses() {
         return addresses;
@@ -48,19 +46,10 @@ public class Cityinfo implements Serializable {
     }
 
     public Integer getId() {
-        return zipcode;
+        return id;
     }
 
     public void setId(Integer id) {
-        this.zipcode = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Cityinfo{" +
-                "zipcode=" + zipcode +
-                ", city='" + city + '\'' +
-                ", addresses=" + addresses +
-                '}';
+        this.id = id;
     }
 }

@@ -36,13 +36,14 @@ public class PersonDTO {
 
 
     public PersonDTO(Person person) {
-        if(person.getId() != null)
+        if(person.getId() != null) {
             this.id = person.getId();
             this.email = person.getEmail();
             this.firstname = person.getFirstname();
             this.lastname = person.getLastname();
             this.gender = person.getGender();
             this.relationshipstatus = person.getRelationshipstatus();
+        }
     }
 
     public long getId() {

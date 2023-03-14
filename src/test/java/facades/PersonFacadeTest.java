@@ -29,6 +29,8 @@ public class PersonFacadeTest {
     public static void setUpClass() {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
        facade = PersonFacade.getPersonFacade(emf);
+       EntityManager em = emf.createEntityManager();
+       em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT=1");
     }
 
     @AfterAll
@@ -53,8 +55,8 @@ public class PersonFacadeTest {
 
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-
             em.getTransaction().commit();
+            em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT=1");
         } finally {
             em.close();
         }
@@ -80,6 +82,24 @@ public class PersonFacadeTest {
     @Test
     public void testGetPersonById(){
         assertEquals("First 1",facade.getById(1).getFirstname());
+    }
+
+//    @Test
+//    public void testUpdatePersonById(){
+//        System.out.println("Testing name change");
+//        PersonDTO personDTO = new PersonDTO(new Person("First 2.5","Last 2","email2@.com","2","2"));
+//        PersonDTO actualDTO = facade.updatePersonById(2,personDTO);
+//        assertEquals("First 2.5",actualDTO.getFirstname());
+//    }
+
+    @Test
+    public void testUpdatePersonById(){
+        System.out.println("Testing name change PT 2");
+        List<PersonDTO> people = facade.getAll();
+        System.out.println(people.get(1).getId());
+        PersonDTO personDTO = facade.updatePersonById(people.get(1).getId(),new PersonDTO("First 2.5","Last 2","email2@.com","2","2"));
+        assertEquals("First 2.5",personDTO.getFirstname());
+
     }
 
 

@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@NamedQuery(name = "Phone.deleteAllRows", query = "DELETE from Phone")
-@Table(name = "Phone")
+@Table(name="Phone")
+@NamedQuery(name="Phone.deleteAllRows",query="DELETE from Phone")
 public class Phone implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -24,15 +24,6 @@ public class Phone implements Serializable {
 
     @Column(name = "description", length = 45)
     private String description;
-
-    public Phone() {
-    }
-
-    public Phone(String number, String countrycode, String description) {
-        this.number = number;
-        this.countrycode = countrycode;
-        this.description = description;
-    }
 
     public String getDescription() {
         return description;
@@ -74,14 +65,4 @@ public class Phone implements Serializable {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Phone{" +
-                "id=" + id +
-                ", person=" + person +
-                ", number='" + number + '\'' +
-                ", countrycode='" + countrycode + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

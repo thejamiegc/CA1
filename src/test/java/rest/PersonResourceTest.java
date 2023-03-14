@@ -103,14 +103,15 @@ public class PersonResourceTest {
                 .body("count", equalTo(2));
     }
     //          TODO : FIX this test personResource method.
-//    @Test
-//    public void testPerson() throws Exception {
-//        given()
-//                .contentType("application/json")
-//                .get("/person").then()
-//                .assertThat()
-//                .statusCode(HttpStatus.OK_200.getStatusCode())
-//                .body("person", equalTo(r2));
-//    }
+
+    @Test
+    public void testPerson() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/person").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("person", equalTo(r2));
+    }
 
 }
