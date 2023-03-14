@@ -55,7 +55,7 @@ public class PersonFacade {
         }
         return new PersonDTO(person);
     }
-    public PersonDTO getById(int id) { //throws RenameMeNotFoundException {
+    public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person rm = em.find(Person.class, id);
 //        if (rm == null)
