@@ -96,6 +96,7 @@ public class PersonFacadeTest {
     public void testUpdatePersonById(){
         System.out.println("Testing name change PT 2");
         List<PersonDTO> people = facade.getAll();
+        System.out.println(people);
         System.out.println(people.get(1).getId());
         PersonDTO personDTO = facade.updatePersonById(people.get(1).getId(),new PersonDTO("First 2.5","Last 2","email2@.com","2","2"));
         assertEquals("First 2.5",personDTO.getFirstname());
