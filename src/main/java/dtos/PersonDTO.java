@@ -17,15 +17,15 @@ public class PersonDTO {
     private String lastname;
     private String email;
     private String gender;
-    private String relationshipStatus;
+    private String relationshipstatus;
 
 
-    public PersonDTO(String firstname, String lastname,String email, String gender, String relationshipStatus) {
+    public PersonDTO(String firstname, String lastname,String email, String gender, String relationshipstatus) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.gender = gender;
-        this.relationshipStatus = relationshipStatus;
+        this.relationshipstatus = relationshipstatus;
     }
 
     public static List<PersonDTO> getDtos(List<Person> people){
@@ -42,7 +42,7 @@ public class PersonDTO {
             this.firstname = person.getFirstname();
             this.lastname = person.getLastname();
             this.gender = person.getGender();
-            this.relationshipStatus = person.getRelationshipstatus();
+            this.relationshipstatus = person.getRelationshipstatus();
     }
 
     public long getId() {
@@ -86,11 +86,11 @@ public class PersonDTO {
     }
 
     public String getRelationshipStatus() {
-        return relationshipStatus;
+        return relationshipstatus;
     }
 
     public void setRelationshipStatus(String relationshipStatus) {
-        this.relationshipStatus = relationshipStatus;
+        this.relationshipstatus = relationshipstatus;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class PersonDTO {
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", gender='" + gender + '\'' +
-                ", relationshipStatus='" + relationshipStatus + '\'' +
+                ", relationshipStatus='" + relationshipstatus + '\'' +
                 '}';
     }
 }
