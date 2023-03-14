@@ -40,23 +40,24 @@ public class PersonFacadeTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
+        facade.create(new PersonDTO(new Person("First 1", "Last 1","email1@.com","1","1")));
+        facade.create(new PersonDTO(new Person("First 2", "Last 2","email2@.com","2","2")));
 
-        try {
-            em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT = 1");
-            em.persist(new Person("Moretext","EvenMoreText","asd@das.dk","gender","loner"));
-            em.persist(new Person("bbb","ccc","aaa@aaa.com","binary","01"));
-
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
     }
 
     @AfterEach
     public void tearDown() {
 //        Remove any data after each test was run
+        EntityManager em = emf.createEntityManager();
+        try {
+
+            em.getTransaction().begin();
+            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
     }
 
     @Test
@@ -65,19 +66,21 @@ public class PersonFacadeTest {
         assertEquals(2, facade.getPersonCount(), "Expects two rows in the database");
     }
 
-/*    @Test
+
+    @Test
     public void testGetAllPeople(){
         System.out.println("testing get all people");
         List<PersonDTO> people = facade.getAll();
 
-        assertEquals("Moretext",people.get(0).getFirstname(),"Expects the first person in the list");
-        assertEquals("bbb",people.get(1).getFirstname(),"Expects the second person in the list");
-    }*/
+        assertEquals("First 1",people.get(0).getFirstname(),"Expects the first person in the list");
+        assertEquals("First 2",people.get(1).getFirstname(),"Expects the second person in the list");
+    }
+
 
     @Test
     public void testGetPersonById(){
-        assertEquals("Moretext",facade.getById(1).getFirstname());
+        assertEquals("First 1",facade.getById(1).getFirstname());
     }
-    
+
 
 }
