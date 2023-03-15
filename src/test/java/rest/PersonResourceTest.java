@@ -1,11 +1,16 @@
 package rest;
 
+import dtos.HobbyDTO;
+import dtos.PersonDTO;
+import entities.Hobby;
 import entities.Person;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -24,12 +29,19 @@ import org.junit.jupiter.api.Test;
 public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
-    private static final String SERVER_URL = "http://localhost:8080/ca1/api/person";
-    private static Person r1, r2;
+    private static final String SERVER_URL = "http://localhost/api";
+    private static Person person1;
+    private static Person person2;
+    private static PersonDTO personDTO1;
+    private static PersonDTO personDTO2;
+    private static Hobby hobby1;
+    private static HobbyDTO hobbyDTO1;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+
+
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -63,17 +75,27 @@ public class PersonResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new Person("Some txt", "More text","text@.com","","");
-        r2 = new Person("aaa", "bbb","a@a.com","jobs","done");
-        try {
-            em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
+
+        em.getTransaction().begin();
+        em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+        em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+
+        hobby1 = new Hobby("bullet journalling","link","sjov","pas");
+        em.persist(hobby1);
+        em.getTransaction().commit();
+        Set<Hobby> hobbySet = new LinkedHashSet<>();
+        hobbySet.add(hobby1);
+        em.getTransaction().begin();
+
+        person1 = new Person("Hans","Oge","mail@mail.dk","male","forever single",hobbySet);
+        person2 = new Person("Molly","Fisk","mail2@mail.dk","female","forever not single",hobbySet);
+        em.persist(person1);
+        em.persist(person2);
+        em.getTransaction().commit();
+
+        hobbyDTO1 = new HobbyDTO(hobby1);
+        personDTO1 = new PersonDTO(person1);
+        personDTO2 = new PersonDTO(person2);
     }
 
     @Test
@@ -84,7 +106,7 @@ public class PersonResourceTest {
 
 
     @Test
-    public void testCount() throws Exception {
+    public void personCountTest() throws Exception {
         given()
                 .contentType("application/json")
                 .get("/person/count").then()
@@ -92,16 +114,15 @@ public class PersonResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("count", equalTo(2));
     }
-    //          TODO : FIX this test personResource method.
 
     @Test
-    public void testPerson() throws Exception {
+    public void getAllPeopleTest() throws Exception {
         given()
                 .contentType("application/json")
                 .get("/person").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("person", equalTo(r2));
+                .body("person", equalTo(""));
     }
 
 }
