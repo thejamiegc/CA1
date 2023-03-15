@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
-    private static final String SERVER_URL = "http://localhost/api";
+    private static final String SERVER_URL = "http://localhost:8080/ca1/api/person";
     private static Person r1, r2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
@@ -82,16 +82,6 @@ public class PersonResourceTest {
         given().when().get("/person").then().statusCode(200);
     }
 
-    //This test assumes the database contains two rows
-//    @Test
-//    public void testDummyMsg() throws Exception {
-//        given()
-//                .contentType("application/json")
-//                .get("/person/").then()
-//                .assertThat()
-//                .statusCode(HttpStatus.OK_200.getStatusCode())
-//                .body("msg", equalTo("Hello from Jon"));
-//    }
 
     @Test
     public void testCount() throws Exception {
