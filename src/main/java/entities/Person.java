@@ -45,6 +45,15 @@ public class Person implements Serializable {
     public Person() {
     }
 
+    public Person(String firstname, String lastname, String email, String gender, String relationshipstatus, Set<Hobby> hobbies) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.gender = gender;
+        this.relationshipstatus = relationshipstatus;
+        this.hobbies = hobbies;
+    }
+
     public Person(String firstname, String lastname, String email, String gender, String relationshipstatus) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -123,5 +132,20 @@ public class Person implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", relationshipstatus='" + relationshipstatus + '\'' +
+                ", addresses=" + addresses +
+                ", phones=" + phones +
+                ", hobbies=" + hobbies +
+                '}';
     }
 }

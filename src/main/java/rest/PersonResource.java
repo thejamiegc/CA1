@@ -36,6 +36,15 @@ public class PersonResource {
         //System.out.println("--------------->"+count);
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
     }
+
+    @GET
+    @Path("hobby/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<PersonDTO> getPeopleByHobby(@PathParam("id")long id){
+        return FACADE.getPeopleByHobby(id);
+    }
+
+
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
@@ -56,4 +65,14 @@ public class PersonResource {
         PersonDTO newPerson = FACADE.updatePersonById(id,personDTO);
         return Response.ok().entity(newPerson).build();
     }
+
+    @DELETE
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response deleteExample(@PathParam("id")long id){
+        FACADE.deletePersonByID(id);
+        return Response.ok().build();
+    }
+
 }

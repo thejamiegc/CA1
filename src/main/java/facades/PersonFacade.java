@@ -1,7 +1,9 @@
 package facades;
 
+import dtos.HobbyDTO;
 import dtos.PersonDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -54,13 +56,6 @@ public class PersonFacade {
         }
         return new PersonDTO(person);
     }
-    public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
-        EntityManager em = emf.createEntityManager();
-        Person rm = em.find(Person.class, id);
-//        if (rm == null)
-//            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
-        return new PersonDTO(rm);
-    }
 
     public long getPersonCount(){
         EntityManager em = getEntityManager();
@@ -75,54 +70,77 @@ public class PersonFacade {
     public List<PersonDTO> getAll(){
         EntityManager em = emf.createEntityManager();
         TypedQuery<Person> query = em.createQuery("SELECT r FROM Person r", Person.class);
-        List<Person> rms = query.getResultList();
-        return PersonDTO.getDtos(rms);
+        List<Person> personList = query.getResultList();
+        return PersonDTO.getDtos(personList);
     }
-    
+
+    public List<PersonDTO> getPersonByName(String firstname) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.firstname =:first",Person.class);
+        query.setParameter("first",firstname);
+        return PersonDTO.getDtos(query.getResultList());
+    }
+
+
+    public Person getPersonById(Long id) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.id =:id",Person.class);
+        query.setParameter("id",id);
+        return query.getSingleResult();
+    }
+
+    public PersonDTO updatePersonById(long id, PersonDTO expectedPersonDTO) {
+        EntityManager em = emf.createEntityManager();
+        Person person = new Person(expectedPersonDTO.getFirstname(),expectedPersonDTO.getLastname(),expectedPersonDTO.getEmail(),expectedPersonDTO.getGender(),expectedPersonDTO.getRelationshipStatus());
+        person.setId(id);
+        em.getTransaction().begin();
+        em.merge(person);
+        em.getTransaction().commit();
+        return new PersonDTO(person);
+    }
+
+    public void deletePerson(Person person1) {
+        EntityManager em = emf.createEntityManager();
+        if (!em.contains(person1)) {
+            em.getTransaction().begin();
+            person1 = em.merge(person1);
+            em.remove(person1);
+            em.getTransaction().commit();
+        }
+    }
+
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
-        PersonFacade fe = getPersonFacade(emf);
-        fe.getAll().forEach(dto->System.out.println(dto));
-        Person tmpPerson = fe.getById2(4);
-
-        System.out.println(tmpPerson.getHobbies());
+        EntityManager em = emf.createEntityManager();
+        PersonFacade personFacade = new PersonFacade();
+        Person person = new Person("Hej","Test","mail","1","nej");
+        em.getTransaction().begin();
+        em.persist(person);
+        em.getTransaction().commit();
+        List<PersonDTO> personList = personFacade.getAll();
+        System.out.println(personList);
+        personFacade.deletePerson(person);
+        personList = personFacade.getAll();
+        System.out.println(personList);
     }
 
-    public PersonDTO updatePersonById(long id, PersonDTO personDTO) {
+    public List<PersonDTO> getPeopleByHobby(long id) {
         EntityManager em = emf.createEntityManager();
-        Person tmpPerson = em.find(Person.class, id);
-        if(tmpPerson != null){
-            tmpPerson = new Person(personDTO.getFirstname(),personDTO.getLastname(),personDTO.getEmail(),personDTO.getGender(),personDTO.getRelationshipStatus());
-            tmpPerson.setId(id);
-            try{
-                em.getTransaction().begin();
-                em.merge(tmpPerson);
-                em.getTransaction().commit();
-            }finally {
-                em.close();
-            }
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN p.hobbies h WHERE h.id = :hobbyId", Person.class);
+        query.setParameter("hobbyId",id);
+        List<Person> people = query.getResultList();
+        return PersonDTO.getDtos(people);
+    }
+
+    public void deletePersonByID(long id) {
+        EntityManager em = emf.createEntityManager();
+        Person person1 = new Person();
+        person1.setId(id);
+        if (!em.contains(person1)) {
+            em.getTransaction().begin();
+            person1 = em.merge(person1);
+            em.remove(person1);
+            em.getTransaction().commit();
         }
-        return new PersonDTO(tmpPerson);
-
-    }
-
-    public PersonDTO getPersonByHobby(Person person) {
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<Hobby> query = em.createQuery("SELECT r FROM Hobby r JOIN Person p WHERE r.id = p.id", Hobby.class);
-
-        // SELECT Person_id FROM Person_has_hobby WHERE Hobby_id = ?
-        // SELECT firstname FROM Person WHERE Person_id = ^^
-        // SELECT name FROM Hobby WHERE Hobby_id = ?
-        System.out.println(person.getHobbies());
-        return null;
-    }
-
-
-    public Person getById2(long id) { //throws RenameMeNotFoundException {
-        EntityManager em = emf.createEntityManager();
-        Person rm = em.find(Person.class, id);
-//        if (rm == null)
-//            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
-        return rm;
     }
 }

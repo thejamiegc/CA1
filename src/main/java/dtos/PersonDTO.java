@@ -5,10 +5,12 @@
  */
 package dtos;
 
+import entities.Hobby;
 import entities.Person;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class PersonDTO {

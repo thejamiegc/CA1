@@ -1,6 +1,8 @@
 package facades;
 
+import dtos.HobbyDTO;
 import dtos.PersonDTO;
+import entities.Hobby;
 import entities.Person;
 import utils.EMF_Creator;
 
@@ -9,11 +11,15 @@ import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -21,6 +27,13 @@ public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
     private static PersonFacade facade;
+    private static Person person1;
+    private static Person person2;
+    private static PersonDTO personDTO1;
+    private static PersonDTO personDTO2;
+    private static Hobby hobby1;
+    private static HobbyDTO hobbyDTO1;
+
 
     public PersonFacadeTest() {
     }
@@ -30,7 +43,7 @@ public class PersonFacadeTest {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
        facade = PersonFacade.getPersonFacade(emf);
        EntityManager em = emf.createEntityManager();
-       em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT=1");
+       //em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT=1");
     }
 
     @AfterAll
@@ -42,8 +55,25 @@ public class PersonFacadeTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        facade.create(new PersonDTO(new Person("First 1", "Last 1","email1@.com","1","1")));
-        facade.create(new PersonDTO(new Person("First 2", "Last 2","email2@.com","2","2")));
+
+        em.getTransaction().begin();
+        hobby1 = new Hobby("bullet journalling","link","sjov","pas");
+        em.persist(hobby1);
+        em.getTransaction().commit();
+        Set<Hobby> hobbySet = new LinkedHashSet<>();
+        hobbySet.add(hobby1);
+        em.getTransaction().begin();
+
+        person1 = new Person("Hans","Oge","mail@mail.dk","male","forever single",hobbySet);
+        person2 = new Person("Molly","Fisk","mail2@mail.dk","female","forever not single",hobbySet);
+        em.persist(person1);
+        em.persist(person2);
+        em.getTransaction().commit();
+
+
+        hobbyDTO1 = new HobbyDTO(hobby1);
+        personDTO1 = new PersonDTO(person1);
+        personDTO2 = new PersonDTO(person2);
 
     }
 
@@ -56,52 +86,51 @@ public class PersonFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             em.getTransaction().commit();
-            em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT=1");
+            //em.createNativeQuery("ALTER TABLE Person AUTO_INCREMENT=1");
         } finally {
             em.close();
         }
     }
 
     @Test
-    public void testPersonCount() throws Exception {
-        System.out.println("testing Person count");
-        assertEquals(2, facade.getPersonCount(), "Expects two rows in the database");
+    public void getPersonByFirstnameTest(){
+        List<PersonDTO> actualPersonList = facade.getPersonByName(personDTO1.getFirstname());
+        System.out.println(actualPersonList);
+        assertEquals(personDTO1.getFirstname(),actualPersonList.get(0).getFirstname());
     }
 
-
     @Test
-    public void testGetAllPeople(){
-        System.out.println("testing get all people");
-        List<PersonDTO> people = facade.getAll();
-
-        assertEquals("First 1",people.get(0).getFirstname(),"Expects the first person in the list");
-        assertEquals("First 2",people.get(1).getFirstname(),"Expects the second person in the list");
+    public void getPersonByIdTest(){
+        Person actualPerson = facade.getPersonById(personDTO1.getId());
+        System.out.println(actualPerson);
+        assertEquals(personDTO1.getId(),actualPerson.getId());
     }
 
-
     @Test
-    public void testGetPersonById(){
-        assertEquals("First 1",facade.getById(1).getFirstname());
+    public void updatePersonByIdTest(){
+        PersonDTO expectedPersonDTO = new PersonDTO("Lillia","Blubla","mail","dummygender","dummyrelation");
+        PersonDTO actualPersonDTO = facade.updatePersonById(personDTO1.getId(),expectedPersonDTO);
+        assertEquals(expectedPersonDTO.getFirstname(),actualPersonDTO.getFirstname());
     }
 
 //    @Test
-//    public void testUpdatePersonById(){
-//        System.out.println("Testing name change");
-//        PersonDTO personDTO = new PersonDTO(new Person("First 2.5","Last 2","email2@.com","2","2"));
-//        PersonDTO actualDTO = facade.updatePersonById(2,personDTO);
-//        assertEquals("First 2.5",actualDTO.getFirstname());
+//    public void deletePersonByIdTest(){
+//        facade.deletePerson(person1);
+//        assertNull(person1);
 //    }
 
     @Test
-    public void testUpdatePersonById(){
-        System.out.println("Testing name change PT 2");
-        List<PersonDTO> people = facade.getAll();
-        System.out.println(people);
-        System.out.println(people.get(1).getId());
-        PersonDTO personDTO = facade.updatePersonById(people.get(1).getId(),new PersonDTO("First 2.5","Last 2","email2@.com","2","2"));
-        assertEquals("First 2.5",personDTO.getFirstname());
-
+    public void createPersonTest(){
+        PersonDTO expectedPersonDTO = new PersonDTO("Lillia","Blubla","mail","dummygender","dummyrelation");
+        PersonDTO actualPersonDTO = facade.create(expectedPersonDTO);
+        assertEquals(expectedPersonDTO.getFirstname(),actualPersonDTO.getFirstname());
     }
 
-
+    @Test
+    public void getPeopleByHobbyTest(){
+        System.out.println(person1.getHobbies());
+        List<PersonDTO> personDTOList = facade.getPeopleByHobby(hobbyDTO1.getId());
+        System.out.println(personDTOList);
+        assertEquals(2,personDTOList.size());
+    }
 }

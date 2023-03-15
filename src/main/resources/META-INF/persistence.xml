@@ -9,7 +9,6 @@
         <class>entities.Phone</class>
         <class>entities.Address</class>
         <class>entities.Hobby</class>
-        <class>entities.Work</class>
         <class>entities.Cityinfo</class>
         <class>entities.Person</class>
         <class>entities.Cityinfo</class>
@@ -45,7 +44,6 @@
         <class>entities.Phone</class>
         <class>entities.Address</class>
         <class>entities.Hobby</class>
-        <class>entities.Work</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         
         <properties>
