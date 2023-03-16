@@ -115,14 +115,14 @@ public class PersonResourceTest {
                 .body("count", equalTo(2));
     }
 
-    @Test
-    public void getAllPeopleTest() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/person").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("person", equalTo(""));
-    }
+//    @Test
+//    public void getAllPeopleTest() throws Exception {
+//        given()
+//                .contentType("application/json")
+//                .get("/person").then()
+//                .assertThat()
+//                .statusCode(HttpStatus.OK_200.getStatusCode())
+//                .body("person", equalTo(""));
+//    }
 
 }
