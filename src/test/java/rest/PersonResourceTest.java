@@ -1,9 +1,11 @@
 package rest;
 
+import com.google.gson.Gson;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
 import entities.Hobby;
 import entities.Person;
+import io.restassured.http.ContentType;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -30,16 +32,23 @@ public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Person person1;
-    private static Person person2;
-    private static PersonDTO personDTO1;
-    private static PersonDTO personDTO2;
-    private static Hobby hobby1;
+
+    private static Person person1, person2;
+
+
+    private static Hobby hobby1, hobby2;
+
+    private static PersonDTO personDTO1, personDTO2;
+
     private static HobbyDTO hobbyDTO1;
+
+    private static Set<Hobby> hobbySet1, hobbySet2, hobbySet3;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+
+    private static Gson gson = new Gson();
 
 
 
@@ -76,26 +85,28 @@ public class PersonResourceTest {
     public void setUp() {
         EntityManager em = emf.createEntityManager();
 
-        em.getTransaction().begin();
-        em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-        em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
-
         hobby1 = new Hobby("bullet journalling","link","sjov","pas");
-        em.persist(hobby1);
-        em.getTransaction().commit();
-        Set<Hobby> hobbySet = new LinkedHashSet<>();
-        hobbySet.add(hobby1);
-        em.getTransaction().begin();
+        hobby2 = new Hobby("Gaming","link","Entertainment","At home");
+        Set<Hobby> hobbySet1 = new LinkedHashSet<>();
+        Set<Hobby> hobbySet2 = new LinkedHashSet<>();
+        hobbySet1.add(hobby1);
+        hobbySet2.add(hobby2);
 
-        person1 = new Person("Hans","Oge","mail@mail.dk","male","forever single",hobbySet);
-        person2 = new Person("Molly","Fisk","mail2@mail.dk","female","forever not single",hobbySet);
-        em.persist(person1);
-        em.persist(person2);
-        em.getTransaction().commit();
+        person1 = new Person("Hans","Oge","mail@mail.dk","male","forever single",hobbySet1);
+        person2 = new Person("Molly","Fisk","mail2@mail.dk","female","forever not single",hobbySet2);
 
-        hobbyDTO1 = new HobbyDTO(hobby1);
-        personDTO1 = new PersonDTO(person1);
-        personDTO2 = new PersonDTO(person2);
+        try {
+            em.getTransaction().begin();
+            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.persist(hobby1);
+            em.persist(hobby2);
+            em.persist(person1);
+            em.persist(person2);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
     }
 
     @Test
@@ -116,13 +127,56 @@ public class PersonResourceTest {
     }
 
     @Test
-    public void getAllPeopleTest() throws Exception {
+    public void createPerson(){
+        Person person = new Person("Zachary","Bloblington","Letsbounce@breakfast.com","unknown","singlepringle",hobbySet2);
+        System.out.println("PERSON ENTITY: "+ person);
+        PersonDTO personDTO = new PersonDTO(person);
+        System.out.println("PERSON DTO: "+ personDTO);
+        String requestBody = gson.toJson(personDTO);
+        System.out.println("REQUEST: " + requestBody);
         given()
-                .contentType("application/json")
-                .get("/person").then()
+                .header("Content-type",ContentType.JSON)
+                .body(requestBody)
+                .post("/person")
+                .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("person", equalTo(""));
+//                .body("id", equalTo(person.getId())) //TODO : ASK TEACHERS ABOUT THIS ON FRIDAY ASWELL AS CONSTRUCTOR IN PERSONDTO !!!
+                .body("firstname", equalTo(person.getFirstname()));
+        System.out.println(gson.toJson(person));
     }
+
+    @Test
+    public void editPerson(){
+        person2.setGender("Unicorn apache helicopter mix");
+        PersonDTO personDTO = new PersonDTO(person2);
+        String requestBody = gson.toJson(personDTO);
+        given()
+                .header("Content-type",ContentType.JSON)
+                .body(requestBody)
+                .put("/person/{id}",person2.getId())
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("firstname", equalTo(person2.getFirstname()));
+        System.out.println(gson.toJson(person2));
+
+    }
+
+
+
+    @Test
+    public void getAllPeople(){
+        given()
+                .contentType(ContentType.JSON)
+                .get("/person")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("size()",equalTo(2));
+    }
+
+
+
 
 }

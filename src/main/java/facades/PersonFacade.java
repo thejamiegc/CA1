@@ -132,6 +132,15 @@ public class PersonFacade {
         return PersonDTO.getDtos(people);
     }
 
+    public int getAmountOfPeopleWithHobby(long id) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN p.hobbies h WHERE h.id = :hobbyId", Person.class);
+        query.setParameter("hobbyId",id);
+        List<Person> people = query.getResultList();
+        return PersonDTO.getDtos(people).size();
+    }
+
+
     public void deletePersonByID(long id) {
         EntityManager em = emf.createEntityManager();
         Person person1 = new Person();

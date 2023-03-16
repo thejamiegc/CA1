@@ -54,13 +54,16 @@ public class Person implements Serializable {
         this.hobbies = hobbies;
     }
 
+
+
     public Person(String firstname, String lastname, String email, String gender, String relationshipstatus) {
         this.firstname = firstname;
-        this.lastname = lastname;
         this.email = email;
+        this.lastname = lastname;
         this.gender = gender;
         this.relationshipstatus = relationshipstatus;
     }
+
 
     public Set<Hobby> getHobbies() {
         return hobbies;

@@ -1,0 +1,28 @@
+GET http://localhost:8080/ca1/api/hobby
+
+###
+POST http://localhost:8080/ca1/api/hobby
+Content-Type: application/json
+#User-Agent: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion
+
+{"category": "Physical Exercise", "name": "Falling", "type":  "cross terrain", "wikiLink": "AAAAAH"}
+
+###
+GET http://localhost:8080/ca1/api/hobby/195
+
+###
+DELETE http://localhost:8080/ca1/api/hobby/1
+###
+
+PUT http://localhost:8080/ca1/api/hobby/2
+Content-Type: application/json
+
+{"category": "Physical Exercise", "name": "Falling", "type":  "cross terrain", "wikiLink": "AAAAAH"}
+###
+GET http://localhost:8080/ca1/api/hobby/count/195
+#PATCH http://localhost:8080/ca1/api/hobby/2
+#Content-Type: application/json
+#
+#{"category":  "Physical Agony"}
+
+

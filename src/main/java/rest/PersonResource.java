@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.HobbyDTO;
 import dtos.PersonDTO;
 import utils.EMF_Creator;
 import facades.PersonFacade;
@@ -19,7 +20,7 @@ public class PersonResource {
        
     private static final PersonFacade FACADE =  PersonFacade.getPersonFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-            
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<PersonDTO> getListOfPeople() {
@@ -27,28 +28,18 @@ public class PersonResource {
 
     }
 
-    @GET
-    @Path("count")
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getRenameMeCount() {
-       
-        long count = FACADE.getPersonCount();
-        //System.out.println("--------------->"+count);
-        return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
-    }
+//    @GET
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public long PersonCount(){
+//        return FACADE.getPersonCount();
+//    }
 
-    @GET
-    @Path("hobby/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<PersonDTO> getPeopleByHobby(@PathParam("id")long id){
-        return FACADE.getPeopleByHobby(id);
-    }
 
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response postExample(String input){
+    public Response createPerson(String input){
         PersonDTO personDTO = GSON.fromJson(input, PersonDTO.class);
         System.out.println(personDTO);
         FACADE.create(personDTO);
@@ -59,7 +50,7 @@ public class PersonResource {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response putExample(String input,@PathParam("id")long id){
+    public Response updatePerson(String input,@PathParam("id")long id){
         PersonDTO personDTO = GSON.fromJson(input, PersonDTO.class);
         System.out.println(personDTO);
         PersonDTO newPerson = FACADE.updatePersonById(id,personDTO);
@@ -70,7 +61,7 @@ public class PersonResource {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response deleteExample(@PathParam("id")long id){
+    public Response deletePerson(@PathParam("id")long id){
         FACADE.deletePersonByID(id);
         return Response.ok().build();
     }

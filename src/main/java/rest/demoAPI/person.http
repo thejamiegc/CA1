@@ -5,7 +5,7 @@ POST http://localhost:8080/ca1/api/person
 Content-Type: application/json
 #User-Agent: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion
 
-{"email": "oreosermitliv@jubi.com", "firstname": "Linus", "lastname":  "Techtipz", "gender": "PC","relationshipstatus": "xD"}
+{"email": "LetsBounce!@neverskipbreakfast.com", "firstname": "Zachary", "lastname":  "Andersson", "gender": "unknown","relationshipstatus": "xD"}
 
 ###
 PUT http://localhost:8080/ca1/api/person/4
@@ -17,7 +17,6 @@ Content-Type: application/json
 GET http://localhost:8080/ca1/api/person/count
 
 ###
-DELETE http://localhost:8080/ca1/api/person/1
+DELETE http://localhost:8080/ca1/api/person/4
 
 ###
-GET http://localhost:8080/ca1/api/person/hobby/195
