@@ -54,7 +54,7 @@ getall.addEventListener('click', (event)=>{
 // HOBBY
 hobbysearch.addEventListener('click', (event)=>{
     const input = document.querySelector("#text").value;
-    fetch(`https://callan.dk/tomcat/ca1/api/person/hobby/${input}`)
+    fetch(`https://callan.dk/tomcat/ca1/api/hobby/${input}`)
         .then(response=>response.json())
         .then(data=>addPerson(data))
         .then(displayPeople)
