@@ -1,7 +1,14 @@
 package facades;
 
+import dtos.CityinfoDTO;
+import dtos.HobbyDTO;
+import entities.Cityinfo;
+import entities.Hobby;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class CityinfoFacade {
     private static CityinfoFacade instance;
@@ -24,7 +31,17 @@ public class CityinfoFacade {
         return instance;
     }
 
+    public List<CityinfoDTO> getAllCities() {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Cityinfo> query = em.createQuery("SELECT c FROM Cityinfo c", Cityinfo.class);
+        List<Cityinfo> cityinfoList = query.getResultList();
+        return CityinfoDTO.getDTOS(cityinfoList);
+    }
+
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+
+
+
 }

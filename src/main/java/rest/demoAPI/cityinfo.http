@@ -1,0 +1,8 @@
+GET http://localhost:8080/ca1/api/cityinfo
+###
+POST http://localhost:8080/ca1/api/address
+# --------> DOES NOT WORK CURRENTLY DUE TO DATABASE BEING FAULTY - PERSON DOESNT HAVE ADDRESS.
+Content-Type: application/json
+#User-Agent: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion
+
+{"streetname": "Balladevej", "streetnumber": "69", "hometype":  "chaos", "person_id": 5,"Cityinfo_zipcode": 160}

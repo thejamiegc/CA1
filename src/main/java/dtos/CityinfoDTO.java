@@ -14,6 +14,7 @@ public class CityinfoDTO {
         this.city = city;
     }
 
+
     public CityinfoDTO(Cityinfo cityinfo){
         if(cityinfo.getId() != null){
             this.zipcode = cityinfo.getId();
@@ -21,11 +22,13 @@ public class CityinfoDTO {
         }
     }
 
-    public static List<CityinfoDTO> getDtos(List<Cityinfo> cityinfoList){
+    public static List<CityinfoDTO> getDTOS(List<Cityinfo> cityinfoList){
         List<CityinfoDTO> cityinfoDTOS = new ArrayList();
         cityinfoList.forEach(cityinfo->cityinfoDTOS.add(new CityinfoDTO(cityinfo)));
         return cityinfoDTOS;
     }
+
+
 
     public int getZipcode() {
         return zipcode;
